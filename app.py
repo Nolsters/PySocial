@@ -28,7 +28,7 @@ def signup():
         val = (email, name, hashed, salt)
         mycursor.execute(sql, val)
         mydb.commit()
-        redirect('/login')
+        return redirect('/LoginLoad', code=302)
     except:
         return "A user with those credentials already exists"
 
@@ -63,6 +63,11 @@ def login():
                 return 'Incorrect Username or Password'
         except TypeError:
             return 'That user does not exist'
+
+@app.route('/logout')
+def logout():
+    session.pop('username', None)
+    return redirect('/LoginLoad')
 
 @app.route('/MakePost')
 def MakePost():

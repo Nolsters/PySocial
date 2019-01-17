@@ -2,12 +2,10 @@
 <html lang="en">
 <h1>Welcome {{ username }}, Here is your feed!</h1>
 
-{% for item in posts and author in display_name %}
+{% for item in posts%}
 <table>
 <tr>
-    <td>{{author[0]}}</td>
     <td>{{item[0]}}</td>
-    <td>{{author[1]}}</td>
     <td>{{item[1]}}</td>
     ---
 </tr>
@@ -15,4 +13,5 @@
 {% endfor %}
 
 <h2><a href="/MakePost">Make a Post</a></h2>
+<h2><a href="/logout">Logout</a></h2>
 </html>
