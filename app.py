@@ -74,6 +74,10 @@ def logout():
 def MakePost():
     return render_template('post.html')
 
+@app.route('/MakePost_Image')
+def MakePost_Image():
+    return render_template('coming_soon.html')
+
 @app.route('/post', methods=['POST', 'GET'])
 def post():
     if 'username' in session:
@@ -98,6 +102,14 @@ def profile():
     post = mycursor.fetchall()
     return render_template('profile.html', username=session['username'], posts=post)
 
+@app.route('/profile_search', methods=['POST', 'GET'])
+def profile_search():
+    name = request.form['search']
+    mycursor = mydb.cursor()
+    sql_select_query = "select `content`, `display_name` from `posts` where `display_name` = %s"
+    mycursor.execute(sql_select_query, (name,))
+    post = mycursor.fetchall()
+    return render_template('profile.html', username=name, posts=post)
 
 @app.route('/LoginLoad')
 def LoginLoad():

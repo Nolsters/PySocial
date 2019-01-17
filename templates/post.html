@@ -1,11 +1,45 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+<head>
+  <title>Make A Post</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
 <body>
 
-<form action="/post" method="post">
-Post: <input type="text" name="Post" value=""><br>
-<input type="submit" value="Submit">
-</form>
-<h2><a href="/login">Go Home</a></h2>
+<div class="container">
+  <h2>Make a Post!</h2>
+  <p>Please do not use profanities.</p>
+  <form action="/post" method="post">
+    <div class="form-group">
+      <label for="comment">Post:</label>
+      <textarea class="form-control" name="Post" rows="5" id="comment"></textarea>
+        <br>
+        <input type="submit" value="Submit">
+        <br>
+        <h2><a href="/login">Go Back</a></h2>
+    </div>
+  </form>
+</div>
+
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
