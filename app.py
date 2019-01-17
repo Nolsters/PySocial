@@ -37,9 +37,10 @@ def signup():
 def login():
     if 'username' in session:
         mycursor = mydb.cursor()
-        sql_select_query = "select `content`, `display_name` from `posts`"
+        sql_select_query = "select `content`, `display_name` from `posts` ORDER BY `post_date` DESC"
         mycursor.execute(sql_select_query)
         post = mycursor.fetchall()
+        print(post)
         return render_template('dashboard.html', username=session['username'], posts=post)
     else:
         try:
@@ -88,6 +89,14 @@ def post():
 @app.route('/')
 def hello_world():
     return render_template('signup.html')
+
+@app.route('/profile_load')
+def profile():
+    mycursor = mydb.cursor()
+    sql_select_query = "select `content`, `display_name` from `posts` where `display_name` = %s"
+    mycursor.execute(sql_select_query, (session['username'],))
+    post = mycursor.fetchall()
+    return render_template('profile.html', username=session['username'], posts=post)
 
 
 @app.route('/LoginLoad')
