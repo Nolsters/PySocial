@@ -3,7 +3,7 @@ from bcrypt import hashpw, gensalt
 import mysql.connector
 import os, encodings
 
-mydb = mysql.connector.connect(
+cnx = mysql.connector.connect(
   host="localhost",
   user="root",
   passwd="",
@@ -23,11 +23,11 @@ def signup():
         password = request.form['password']
         salt = gensalt(12)
         hashed = hashpw(password.encode('utf8'), salt)
-        mycursor = mydb.cursor()
+        cursor = cnx.cursor(buffered=True)
         sql = "INSERT INTO `database`(`email`, `display_name`, `password`, `salt`) VALUES (%s, %s, %s, %s)"
         val = (email, name, hashed, salt)
-        mycursor.execute(sql, val)
-        mydb.commit()
+        cursor.execute(sql, val)
+        cnx.commit()
         return redirect('/LoginLoad', code=302)
     except:
         return "A user with those credentials already exists"
@@ -36,28 +36,28 @@ def signup():
 @app.route('/login', methods=['POST', 'GET'])
 def login():
     if 'username' in session:
-        mycursor = mydb.cursor()
+        cursor = cnx.cursor(buffered=True)
         sql_select_query = "select `content`, `display_name` from `posts` ORDER BY `post_date` DESC"
-        mycursor.execute(sql_select_query)
-        post = mycursor.fetchall()
+        cursor.execute(sql_select_query)
+        post = cursor.fetchall()
         print(post)
         return render_template('dashboard.html', username=session['username'], posts=post)
     else:
         try:
             name_entered = request.form['name']
             password_entered = request.form['password']
-            mycursor = mydb.cursor()
+            cursor = cnx.cursor(buffered=True)
             sql_select_query = "select `password` from `database` where `display_name` = %s"
-            mycursor.execute(sql_select_query, (name_entered,))
-            record, = mycursor.fetchone()
+            cursor.execute(sql_select_query, (name_entered,))
+            record, = cursor.fetchone()
             salt_query = "select `salt` from `database` where `display_name` = %s"
-            mycursor.execute(salt_query, (name_entered,))
-            salt = mycursor.fetchone()[0]
+            cursor.execute(salt_query, (name_entered,))
+            salt = cursor.fetchone()[0]
             if hashpw(password_entered.encode('utf8'), salt) == record:
-                mycursor = mydb.cursor()
+                cursor = cnx.cursor(buffered=True)
                 sql_select_query = "select `content`, `display_name` from `posts`"
-                mycursor.execute(sql_select_query)
-                post = mycursor.fetchall()
+                cursor.execute(sql_select_query)
+                post = cursor.fetchall()
                 session['username'] = name_entered
                 return render_template('dashboard.html', username=name_entered, posts=post)
             else:
@@ -82,12 +82,12 @@ def MakePost_Image():
 def post():
     if 'username' in session:
         username_session = session['username']
-        mycursor = mydb.cursor()
+        cursor = cnx.cursor(buffered=True)
         content = request.form['Post']
         sql = "INSERT INTO `posts`(`display_name`, `content`) VALUES (%s, %s)"
         val = (username_session, content)
-        mycursor.execute(sql, val)
-        mydb.commit()
+        cursor.execute(sql, val)
+        cnx.commit()
         return redirect('/login')
 
 @app.route('/')
@@ -96,19 +96,19 @@ def hello_world():
 
 @app.route('/profile_load')
 def profile():
-    mycursor = mydb.cursor()
+    cursor = cnx.cursor(buffered=True)
     sql_select_query = "select `content`, `display_name` from `posts` where `display_name` = %s"
-    mycursor.execute(sql_select_query, (session['username'],))
-    post = mycursor.fetchall()
+    cursor.execute(sql_select_query, (session['username'],))
+    post = cursor.fetchall()
     return render_template('profile.html', username=session['username'], posts=post)
 
 @app.route('/profile_search', methods=['POST', 'GET'])
 def profile_search():
     name = request.form['search']
-    mycursor = mydb.cursor()
+    cursor = cnx.cursor(buffered=True)
     sql_select_query = "select `content`, `display_name` from `posts` where `display_name` = %s"
-    mycursor.execute(sql_select_query, (name,))
-    post = mycursor.fetchall()
+    cursor.execute(sql_select_query, (name,))
+    post = cursor.fetchall()
     return render_template('profile.html', username=name, posts=post)
 
 @app.route('/LoginLoad')
