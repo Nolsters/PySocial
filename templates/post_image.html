@@ -13,14 +13,15 @@
 <div class="container">
   <h2>Make a Post!</h2>
   <p>Please do not use profanities.</p>
-  <form action="/post" method="post">
+  <form action="/post_image" method="post">
     <div class="form-group">
       <label for="comment">Post:</label>
-      <textarea class="form-control" name="Post" rows="5" id="comment"></textarea><br>
-              <input type="text" name="sub-choice">
+          <form method=post enctype=multipart/form-data>
+      <input type=file name=file>
         <br>
         <input type="submit" value="Submit">
         <br>
+      </form>
         <h2><a href="/login">Go Back</a></h2>
     </div>
   </form>
@@ -28,19 +29,3 @@
 
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

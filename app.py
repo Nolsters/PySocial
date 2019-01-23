@@ -1,4 +1,4 @@
-from flask import Flask, session, redirect, url_for, escape, request, render_template
+from flask import Flask, session, redirect, url_for, escape, request, render_template, flash
 from bcrypt import hashpw, gensalt
 import mysql.connector
 import os, encodings
@@ -37,7 +37,7 @@ def signup():
 def login():
     if 'username' in session:
         cursor = cnx.cursor(buffered=True)
-        sql_select_query = "select `content`, `display_name` from `posts` ORDER BY `post_date` DESC"
+        sql_select_query = "select `content`, `display_name`, `post_date`, `sub-name` from `posts` ORDER BY `post_date` DESC"
         cursor.execute(sql_select_query)
         post = cursor.fetchall()
         print(post)
@@ -65,34 +65,43 @@ def login():
         except TypeError:
             return 'That user does not exist'
 
+
 @app.route('/logout')
 def logout():
     session.pop('username', None)
     return redirect('/LoginLoad')
 
+
 @app.route('/MakePost')
 def MakePost():
     return render_template('post.html')
 
-@app.route('/MakePost_Image')
-def MakePost_Image():
-    return render_template('coming_soon.html')
 
 @app.route('/post', methods=['POST', 'GET'])
 def post():
     if 'username' in session:
-        username_session = session['username']
-        cursor = cnx.cursor(buffered=True)
-        content = request.form['Post']
-        sql = "INSERT INTO `posts`(`display_name`, `content`) VALUES (%s, %s)"
-        val = (username_session, content)
-        cursor.execute(sql, val)
-        cnx.commit()
-        return redirect('/login')
+        try:
+            username_session = session['username']
+            sub = request.form['sub-choice']
+            cursor = cnx.cursor(buffered=True)
+            sql_select_query = "select `sub-name` from `sub` where `sub-name` = %s"
+            cursor.execute(sql_select_query, (sub,))
+            sub_check = cursor.fetchone()[0]
+            print(sub_check)
+            cursor = cnx.cursor(buffered=True)
+            content = request.form['Post']
+            sql = "INSERT INTO `posts`(`display_name`, `content`, `sub-name`) VALUES (%s, %s, %s)"
+            val = (username_session, content, sub)
+            cursor.execute(sql, val)
+            cnx.commit()
+            return redirect('/login')
+        except TypeError:
+            return redirect('/login')
 
 @app.route('/')
 def hello_world():
     return render_template('signup.html')
+
 
 @app.route('/profile_load')
 def profile():
@@ -102,6 +111,7 @@ def profile():
     post = cursor.fetchall()
     return render_template('profile.html', username=session['username'], posts=post)
 
+
 @app.route('/profile_search', methods=['POST', 'GET'])
 def profile_search():
     name = request.form['search']
@@ -110,6 +120,22 @@ def profile_search():
     cursor.execute(sql_select_query, (name,))
     post = cursor.fetchall()
     return render_template('profile.html', username=name, posts=post)
+
+
+@app.route('/sub_load')
+def subsocial_create():
+    return render_template('create_sub_social.html', username=session['username'])
+
+
+@app.route('/sub_create', methods=['POST', 'GET'])
+def sub_call():
+    name = request.form['sub-name']
+    cursor = cnx.cursor(buffered=True)
+    sql = "INSERT INTO `sub`(`sub-name`) VALUES (%s)"
+    cursor.execute(sql, (name,))
+    cnx.commit()
+    return redirect('/login')
+
 
 @app.route('/LoginLoad')
 def LoginLoad():

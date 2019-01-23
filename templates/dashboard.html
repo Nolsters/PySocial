@@ -44,6 +44,7 @@
         <li class="active"><a href="/login">Home</a></li>
         <li><a href="/MakePost">Post Text</a></li>
           <li><a href="/MakePost_Image">Post Image</a></li>
+          <li><a href="/sub_load">Make a Sub</a></li>
         <li><a href="/logout">Logout</a></li>
         <li><a href="/profile_load">Profile</a></li>
       </ul><br>
@@ -63,8 +64,8 @@
       <h4><small>RECENT POSTS</small></h4>
       <hr>
       {% for item in posts%}
-      <h5><span class="glyphicon glyphicon-time"></span> Post by {{ item[1]}} </h5>
-          <span class="label label-primary">Test</span></h5>
+          <h5><span class="glyphicon glyphicon-time"></span> Post by {{ item[1] }} at {{ item[2] }}</h5>
+          <span class="label label-primary">{{ item[3] }}</span></h5>
           <br><br>
       <p>{{ item[0] }}</p>
       <br><br>
