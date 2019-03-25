@@ -1,5 +1,4 @@
 # PySocial | http://nolanhepworth.me
-[![Build Status](https://travis-ci.org/skypjack/entt.svg?branch=master)](https://travis-ci.org/skypjack/entt)
 * A social application built using the flask framework.
 * Project status: working/prototype
 
