@@ -11,7 +11,7 @@ cnx = mysql.connector.connect(  # Here I connect to the database that is setup i
 )
 
 app = Flask(__name__)
-app.secret_key = '\xf1q=\xac\x98b\x1f\\\xf2\x95MGj\xe4g:\x0b\x0fP\xdb\xe4\x93\xae\xa1'  # Secret key used for sessions!
+app.secret_key = 'INSERT A SECRET KEY HERE'  # Secret key used for sessions!
 
 
 '''
