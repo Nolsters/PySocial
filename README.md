@@ -1,4 +1,4 @@
-# PySocial | http://nolanhepworth.me
+# PySocial | http://nolanhepworth.me (Website Down)
 * A social application built using the flask framework.
 * Project status: working/prototype
 
@@ -9,4 +9,4 @@
 - Refer to code to see what axactly to call them. (Will update Soon)
 
 ## Running
-- You just need to rund the app.py python file and it should be running at your localhost:8000.
+- You just need to run the app.py python file and it should be running at your localhost:8000.
